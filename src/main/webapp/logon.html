@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name=viewport content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="css/register.css">
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="js/register.js"></script>
+    <title>NIT信息修改</title>
+</head>
+<body>
+<div class="app">
+    <div class="bg">
+        <div class="lBox">
+
+        </div>
+        <div class="rBox">
+            <div class="logonBox">
+                <div class="tip"><h2>NIT身份信息修改</h2></div>
+                <div class="iconBox"></div>
+                <div class="logon">
+                    <form>
+                        <div class="accBox">
+                            <div class="inBox">
+                                <div class="label_box">
+                                    <span class="lb">学 号:</span>
+                                </div>
+                                <div class="input_box" >
+                                    <input type="text" placeholder="输入学号"  id="input_account">
+                                </div>
+                                <div class="advice_box">
+                                    <strong id="yz_1"></strong>
+                                </div>
+                            </div>
+                            <div class="error_box">
+                                <b id="error_acc"></b>
+                            </div>
+                        </div>
+
+                        <div class="passBox01">
+                            <div class="inBox">
+                                <div class="label_box">
+                                    <span class="lb">密 码:</span>
+                                </div>
+                                <div class="input_box">
+                                    <input type="password" placeholder="输入密码" id="input_pass01">
+                                </div>
+                                <div class="advice_box">
+                                    <strong id="yz_2"></strong>
+                                </div>
+                            </div>
+                            <div class="error_box">
+                                <b id="error_pass01"></b>
+                            </div>
+                        </div>
+                        <div class="passBox02">
+                            <div class="inBox">
+                                <div class="label_box">
+                                    <span class="lb">验证密码:</span>
+                                </div>
+                                <div class="input_box">
+                                    <input type="password" placeholder="重新输入密码" id="input_pass02">
+                                </div>
+                                <div class="advice_box">
+                                    <strong id="yz_3"></strong>
+                                </div>
+                            </div>
+                            <div class="error_box">
+                                <b id="error_pass02"></b>
+                            </div>
+                        </div>
+
+
+                        <div class="emailBox">
+                            <div class="inBox">
+                                <div class="label_box">
+                                    <span class="lb">邮 箱</span>
+                                </div>
+                                <div class="input_box">
+                                    <input type="text" placeholder="输入邮箱" id="input_email">
+                                </div>
+                                <div class="advice_box">
+                                    <a id="send_yzm" href="javascript:void(0)" >发送验证码</a>
+                                </div>
+                            </div>
+                            <div class="error_box">
+                                <b id="error_email"></b>
+                            </div>
+                        </div>
+
+                        <div class="yzBox">
+                            <div class="inBox">
+                                <div class="label_box">
+                                    <span class="lb">验证码:</span>
+                                </div>
+                                <div class="input_box" >
+                                    <input type="text" placeholder="输入验证码" id="input_yzm">
+                                </div>
+                                <div class="advice_box">
+                                    <strong id="yz_5"></strong>
+                                </div>
+                            </div>
+                            <div class="error_box">
+                                <b id="error_yzm"></b>
+                            </div>
+                        </div>
+
+                        <div class="subBox">
+                            <!-- javascript:void(0) -->
+                            <a href="javascript:void(0)" id="sub">
+                                <span>提 交</span>
+                            </a>
+                        </div>
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+</body>
+</html>

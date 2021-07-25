@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="css/my.css">
+    <link rel="stylesheet" type="text/css" href="css/wrjBox.css">
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="js/jquery.cookie.js"></script>
+    <SCRIPT>
+        var pl_msg_id;
+        var pl_msg_level;
+        var   boxid;
+        function addhuifu(id,level,data){
+            var needid;
+            data = JSON.parse(data);
+            var co="#e2dada";
+            for (i=0;i<data.length;i++){
+                var ob=data[i];
+                var num=ob.level-2;
+                num=num*20;
+                if(level==1){
+                    needid=".more_plBox";
+                }else{
+                    needid="#pl_level_"+id;
+                }
+                if(level%2!=0){
+                    co="#f2fa04";
+                }
+                if(level==1){
+                    co="#ace2ff";
+                }
+                var str="<div style='padding-left: "+num+"px;background: "+co+"' id='pl_level_"+ob.id+"' class=\"more_pl\">\n" +
+                    "                    <div class=\"more_pl_str\">\n" +
+                    "                        <span class=\"more_pl_name\">"+ob.name+":</span>\n" +
+                    "                        <span class=\"more_pl_nr\">"+ob.msg+"</span>\n" +
+                    "                    </div>\n" +
+                    "                    <div class=\"more_pl_info\">\n" +
+                    "                        <span ><a class='lever_pinglun_Zan' level=\""+ob.level+"\" href=\"javascript:void(0)\" id=\"more_pl_zan_"+ob.id+"\" class=\"mouselis\">赞 <span id='jlZan_Num_"+ob.id+"'>"+ob.zan+"</span></a></span>\n" +
+                    "                        <span><a class='lever_pinglun' level=\""+ob.level+"\" href=\"javascript:void(0)\" id=\"more_pl_pl_"+ob.id+"\" class=\"mouselis\">评论 </a></span><i id='pl_img_num_"+ob.id+"'>"+ob.plNum+"</i>\n" +
+                    "                        <span  class=\"mouselis\" id=\"more_pl_time_"+ob.id+"\">"+ob.time+"</span>\n" +
+                    "                    </div>\n" +
+                    "                </div>";
+                if($("#pl_level_"+ob.id).length>0){
+                }else {
+                    $(needid).append(str);
+                }
+            }
+            $(".mouselis").mouseenter(function (){
+                var id=$(this).attr("id");
+                $("#"+id).css("color","#007db8");
+            });
+            $(".mouselis").mouseleave(function (){
+                var id=$(this).attr("id");
+                $("#"+id).css("color","#5d5d5d");
+            });
+            $(".lever_pinglun").click(function (){
+                var id2 = $(this).attr("id");
+                var oppid2 = id2.substring(id2.lastIndexOf('_') + 1);
+                var level=$(this).attr("level");
+                getPinglun(oppid2,level);
+                addpl(oppid2,level);
+            });
+            $(".lever_pinglun_Zan").click(function (){
+                var id = $(this).attr("id");
+                if($("#" + id).attr("is")==1){
+                    return false;
+                }
+                var oppid = id.substring(id.lastIndexOf('_') + 1);
+                addZan(oppid);
+            });
+            pl_msg_id=id;
+            pl_msg_level=level;
+
+        }
+
+        function addpl(id,level){
+
+            if (typeof  pl_msg_id==='undefined'){
+            }
+            else{
+                $("#pl_str_nr_"+pl_msg_id).remove();
+                $("#pl_str_send_"+pl_msg_id).remove();
+            }
+            pl_msg_id=id;
+            pl_msg_level=level;
+            var str="<div class=\"plnewstr\" id='pl_str_nr_"+id+"' contenteditable=\"true\">\n" +
+                "                </div>\n" +
+                "                <button id='pl_str_send_"+id+"' class=\"plnewsend right\">发送</button>";
+            if($("#plnewsBox_"+id).length>0) {
+                $("#plnewsBox_" + id).append(str);
+            }
+            else {
+                $("#plnewsBox_" + boxid).append(str);
+            }
+            $("#pl_str_send_"+id).click(function (){
+                var nr=$("#pl_str_nr_"+id).text();
+                if(nr.length<1){
+                    return false;
+                }
+                $.get("/add/friendmsg", {
+                        msg:nr,
+                        level:level,
+                        oppid:id,
+                    },
+                    function (data, status) {
+                        if (status == "success") {
+                            if (data["code"] == 1) {
+                                $("#pl_str_nr_"+id).text("");
+                                var n= $("#pl_img_num_"+id).text();
+                                n=parseInt(n);
+                                n++;
+                                $("#pl_img_num_"+id).text(n);
+                                getPinglun(pl_msg_id,pl_msg_level);
+
+                            }
+                        }
+                    });
+            });
+        }
+
+
+        function alZan(id){
+
+            var num=$("#jlZan_Num_"+id).text();
+            num= parseInt(num);
+            num++;
+            $("#jlZan_Num_"+id).text(num);
+            $("#zan_img_" + id).attr("src", "images/zan2.png");
+            $("#zan_img_" + id).attr("is", "1");
+            $("#more_pl_zan_" + id).attr("is", "1");
+        }
+        function addZan(id){
+            $.get("/add/friendmsgZanByid", {
+                    id:id
+                },
+                function (data, status) {
+                    if (status == "success") {
+                        if (data["code"] == 1) {
+                            alZan(id);
+                        }
+                    }
+                });
+        }
+        function addly(data) {
+            data = JSON.parse(data);
+            for (i = 0; i < data.length; i++) {
+                var ob = data[i];
+                var str = "<div class=\"lyBox\">\n" +
+                    "        <div class=\"lyImgBox\">\n" +
+                    "            <img src=\"images/A33.jpg\">\n" +
+                    "            <h3 align='center'>" + ob.name + "(<span style='color: #00dede'>" + ob.acc + "</span>)</h3>\n" +
+                    "        </div>\n" +
+                    "        <div class=\"lyInfoBox\">\n" +
+                    "            <div class=\"infoTit\">\n" +
+                    "                <h2 align='center'>" + ob.tit + "</h2>\n" +
+                    "            </div>\n" +
+                    "            <div class=\"infoStr\">\n" +
+                    "                <p class='lyinfostrfont'>" + ob.msg + "\n" +
+                    "                </p>\n" +
+                    "            </div>\n" +
+                    "            <div class=\"more_plBox\">\n" +
+                    "\n" +
+                    "            </div>\n" +
+                    "            <div class=\"infoBottom\">\n" +
+                    "                <div class=\"lyTime left\">\n" +
+                    "                    <span style='padding-left: 10px'>" + ob.time + "</span>\n" +
+                    "                </div>\n" +
+                    "                <div class=\"plZan right\">\n" +
+                    "                    <a href=\"javascript:void(0)\">\n" +
+                    "                        <span><img level=\""+ob.level+"\" class='zan_img' id=\"zan_img_" + ob.id + "\" src=\"images/zan.png\"></span>\n" +
+                    "                        <span id='jlZan_Num_"+ob.id+"'>" + ob.zan + "</span>\n" +
+                    "                    </a>\n" +
+                    "                </div>\n" +
+                    "                <div class=\"lyNum right\">\n" +
+                    "                    <a href=\"javascript:void(0)\">\n" +
+                    "                        <span><img level=\""+ob.level+"\"  class='pl_img' id=\"pl_img_" + ob.id + "\" src=\"images/pl.png\"></span>\n" +
+                    "                        <span id='pl_img_num_"+ob.id+"'>" + ob.plNum + "</span>\n" +
+                    "                    </a>\n" +
+                    "                </div>\n" +
+                    "                <div class=\"clear\"></div>\n" +
+                    "            </div>\n" +
+                    "            <div id=\"plnewsBox_"+ob.id+"\" class=\"plnewsBox\">\n" +
+                    "\n" +
+                    "            </div>\n" +
+                    "        </div>\n" +
+                    "        <div class=\"clear\"></div>\n" +
+                    "    </div>";
+
+                if($("#zan_img_"+ob.id).length>0){
+                    return false;
+                }else {
+                    $(".lyBody").append(str);
+                }
+            }
+            $(".zan_img").mouseenter(function () {
+                var id = $(this).attr("id");
+                $("#" + id).attr("src", "images/zan2.png")
+            });
+            $(".zan_img").mouseleave(function () {
+                var id = $(this).attr("id");
+                if($("#" + id).attr("is")==1){
+                    return false;
+                }
+                $("#" + id).attr("src", "images/zan.png");
+            });
+            $(".pl_img").mouseenter(function () {
+                var id = $(this).attr("id");
+                $("#" + id).attr("src", "images/pl2.png")
+            });
+            $(".pl_img").mouseleave(function () {
+                var id = $(this).attr("id");
+                $("#" + id).attr("src", "images/pl.png")
+            });
+            $(".pl_img").click(function () {
+                var id = $(this).attr("id");
+                var oppid = id.substring(id.lastIndexOf('_') + 1);
+                boxid=oppid;
+                var level=$(this).attr("level");
+                getPinglun(oppid,level);
+                addpl(oppid,level);
+            });
+            $(".zan_img").click(function (){
+                var id = $(this).attr("id");
+                if($("#" + id).attr("is")==1){
+                    return false;
+                }
+                var oppid = id.substring(id.lastIndexOf('_') + 1);
+                addZan(oppid);
+            });
+        };
+
+
+        function getFriendMsg(){
+            $.ajax({
+                    url:'/json/friendmsg',
+                    type:'get',
+                    dataType:'json',
+                    processData : false,
+                    contentType : false,
+                    success:function (data){
+                        addly(data["msg"]);
+
+                    }
+                }
+            );
+        }
+
+        function  getPinglun(oppid,level){
+            $.get("/json/friendmsgByoppid", {
+                    id:oppid,
+                    level:level
+                },
+                function (data, status) {
+                    if (status == "success") {
+                        if (data["code"] == 1) {
+                            addhuifu(oppid,level,data["msg"]);
+                        }
+                    }
+                });
+
+        }
+        $(document).ready(function(){
+            getFriendMsg();
+            $("#pl_str_send_0").click(function (){
+                var nr=$("#pl_str_nr_0").text();
+                if(nr.length<1){
+                    return false;
+                }
+                $.get("/add/friendmsg", {
+                        msg:nr,
+                        level:0,
+                        oppid:-1,
+                        tit:$("mytit").val()
+                    },
+                    function (data, status) {
+                        if (status == "success") {
+                            if (data["code"] == 1) {
+                                location.reload();
+                            }
+                        }
+                    });
+            });
+        });
+    </SCRIPT>
+    <style>
+
+        .ulBar ul {
+            box-sizing: border-box;
+            list-style: none;
+            width: 670px;
+            margin-left: 200px;
+            display: inline-block;
+        }
+
+        .ulBar{
+            box-sizing: border-box;
+            margin-top: 100px;
+            background: #a31818;
+        }
+        .ulBar li {
+            box-sizing: border-box;
+            line-height: 40px;
+            float:left;
+            background:#a31818;
+            margin:2px 8px 0 8px;
+            color: white;
+            font-size: 20px;
+        }
+        li:hover{
+            cursor:pointer;
+            background: white;
+            color: #5d5d5d;
+        }
+        .schooImgBox{
+            margin:50px;
+        }
+        .schoolImg{
+            font-size: 14px;
+            color: #000;
+            font-family: "microsoft yahei", 微软雅黑;
+            border-top-width: 0px;
+            border-right-width: 0px;
+            border-bottom-width: 0px;
+            border-left-width: 0px;
+            border-top-style: solid;
+            border-right-style: solid;
+            border-bottom-style: solid;
+            border-left-style: solid;
+            aspect-ratio: auto 200 / 150;
+            height: 150px;
+            width: 250px;
+            padding: 0 40px 20px;
+
+        }
+        td{
+            font-size: 14px;
+            color: #000;
+            font-family: "microsoft yahei", 微软雅黑;
+        }
+        tr{
+            font-size: 14px;
+            color: #000;
+            font-family: "microsoft yahei", 微软雅黑;
+        }
+        tbody{
+            font-size: 14px;
+            color: #000;
+            font-family: "microsoft yahei", 微软雅黑;
+        }
+        .school_img_tit span{
+            font-size: 14px;
+            color: #007db8;
+            font-weight: bold;
+            font-family: 微软雅黑;
+        }
+        .right{
+            float: right;
+        }
+        .left{
+            float: left;
+        }
+        .clear{
+            clear: both;
+        }
+        a{
+            text-decoration: none;
+        }
+    </style>
+    <title>1子岛</title>
+</head>
+<body>
+<div class="topBar">
+    <ul class="top_ul">
+        <a href="/login.html" target="_blank">登 录</a>
+        <a href="/logon.html" target="_blank">修改密码 </a>
+    </ul>
+</div>
+<div class="logo">
+    <div class="ulBar">
+        <ul>
+            <a href="/"><li><span>网站首页</span></li></a>
+            <a href="/chat.html"><li><span>在线聊天</span></li></a>
+            <a href="/dongtai.html"><li style="background: white;color: black"><span>校友动态</span></li></a>
+            <a href="schoolImg.html"><li><span>母校风情</span></li></a>
+            <a href="notice.html"><li><span>母校公告</span></li></a>
+            <a href="liuyan.html"><li><span>留 言 板</span></li></a>
+
+            <div class="clear"></div>
+        </ul>
+    </div>
+
+
+</div>
+<style>
+    .lyBody{
+        width: 1000px;
+        margin: 30px auto;
+        border-left: 1px solid #00dede;
+    }
+    .lyBox{
+        width: 700px;
+        box-sizing: border-box;
+        min-height: 170px;
+        margin: 20px;
+        border: 1px solid #FFCC00;
+    }
+    .lyImgBox{
+        box-sizing: border-box;
+        width: 150px;
+        height: 140px;
+
+        float: left;
+    }
+    .lyImgBox img{
+        width: 150px;
+        height: 140px;
+
+    }
+    .lyInfoBox{
+        box-sizing: border-box;
+
+        float: left;
+        overflow: hidden;
+        width: 547px;
+    }
+    .infoTit{
+        box-sizing: border-box;
+
+    }
+    .infoStr{
+        box-sizing: border-box;
+        overflow: hidden;
+        min-height: 110px;
+    }
+    .lyinfostrfont{
+        font-family: '微软雅黑';
+        font-size: 17px;
+        text-indent:2rem;
+        padding-left: 10px;
+    }
+
+    .lyNum img,.plZan img{
+        width: 20px;
+        height: 20px;
+        font-family: "microsoft yahei", 微软雅黑;
+    }
+    .plZan,.lyNum{
+        margin-right: 20px;
+    }
+    .more_plBox{
+        background: #e3dede;
+    }
+    .more_pl{
+        border-bottom: 1px solid #FFCC00;
+    }
+    .more_pl_name{
+        color: #030303;
+        font-weight: bolder;
+        font-size: 16px;
+    }
+    .more_pl_nr{
+        color: #030303;
+    }
+    .plnewstr{
+        margin-top: 10px;
+        font-size: 15px;
+        border: 1px solid #00fff5;
+
+        outline:none;
+    }
+    .plnewsend{
+        width: 80px;
+        color: white;
+        background: #00dede;
+    }
+
+</style>
+<div class="lyBody">
+    <div class="lyBody_tit">
+        <input type="text" id="mytit" style="margin-left: 300px;color: #3703ff" placeholder="书写自己的动态"></input>
+    </div>
+    <div style="border-bottom: 1px solid #57ea07" class="zhudong_plBox">
+        <div class="plnewstr" style="padding: 10px;min-height: 100px;" id='pl_str_nr_0' contenteditable="true">
+        </div>
+        <button id='pl_str_send_0' class="plnewsend right">发 布</button>
+    </div>
+</div>
+<div class="blank"></div>
+<div class="buttom">
+    <div>
+        <p>©<span id="DateYear">2021</span>版权1所有<br>闽ICP备18029878号
+        </p>
+    </div>
+</div>
+
+</body>
+</html>

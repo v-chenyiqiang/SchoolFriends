@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>校园管理系统</title>
+    <style>
+        *{
+            border: 0;
+            margin: 0;
+        }
+        body{
+            margin: 30px;
+        }
+        .left{
+            float: left;
+        }
+        .right{
+            float: right;
+        }
+        .chat_qun_app_Box{
+            width: 70%;
+            height: 430px;
+        }
+        .clear{
+            clear: both;
+        }
+        div{
+            box-sizing: border-box;
+        }
+        textarea{
+            outline:none;
+            resize:none;
+        }
+        .chat_qun_app_Box{
+            position: relative;
+            border: 1px solid cornflowerblue;
+        }
+        .chat_tit_Box{
+            padding: 20px;
+            height: 70px;
+            border-bottom: 1px solid #e7e7e7;
+        }
+        .chat_left_Box{
+            border-right: 1px solid #d0c4c4;
+            width: calc(100% - 250px);
+            box-sizing: border-box;
+        }
+        .chat_right_Box{
+            width: 250px;
+            box-sizing: border-box;
+        }
+        .chat_body_Box{
+            height: 210px;
+            border-bottom: 1px solid #e7e7e7;
+            overflow: auto;
+            box-sizing: border-box;
+        }
+        .chat_notic_Box{
+            border-bottom: 1px solid #e7e7e7;
+            height: 220px;
+        }
+        .chat_str_Box{
+            padding: 10px;
+        }
+        .chat_scan_Box{
+            bottom: 0;
+            position: absolute;
+            height: 150px;
+            box-sizing: border-box;
+            width: calc(100% - 250px);
+            border-right: 1px solid #d0c4c4;
+
+        }
+        .chat_scan_sys{
+            box-sizing: border-box;
+            height: 30px;
+            border: 1px solid chartreuse;
+        }
+        .chat_scan_str{
+            height: 80px;
+
+        }
+        .chat_scan_send{
+            box-sizing: border-box;
+            height: 40px;
+
+        }
+        .chat_scan_send button{
+            float: right;
+            height:calc(100% - 2px);
+            width: 15%;
+            margin: 1px 10px;
+            background:linear-gradient(90deg,#1596fb,#002dff);
+            color: white;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+        .str_name{
+            color: #063ff1;
+        }
+        .str_acc{
+            color: #00dede;
+        }
+        .str_time{
+            color: #154bf6;
+        }
+
+        .str_name_self{
+            color: #21c405;
+        }
+        .str_acc{
+            color: #00dede;
+        }
+        .str_time_self{
+            color: #21c405;
+        }
+        .str_body_self{
+            color: #1a2d17;
+        }
+        .chat_str_body{
+            color: #1053e7;
+            padding: 10px;
+            font-size: 18px;
+            font-family: 微软雅黑;
+        }
+        .chat_scan_str textarea{
+            box-sizing: border-box;
+            font-size: 17px;
+            width: 100%;
+            padding: 10px;
+        }
+        .tubiao{
+            box-sizing: border-box;
+            background: #21c405;
+            height: 20px;
+            width: 45px;
+            font-size: 9px;
+            margin: 4px;
+            overflow: hidden;
+        }
+        button:hover{
+            cursor:pointer;
+            border: 1px solid #f8fafc;
+        }
+        #chat_str:focus{
+            border: 1px solid #9a9090;
+        }
+        #chat_str{
+            margin: 1px;
+            height:78px;
+            padding: 5px;
+            overflow-y: scroll;
+            border-radius:10px;
+            resize: none;
+            text-align: left;
+            overflow-x:hidden;
+            box-sizing: border-box;
+            word-wrap:break-word;
+            outline: none;
+            border: 1px solid #e7e7e7;
+        }
+        .system_or_his{
+            width: 250px;
+            height: 430px;
+            border: 1px solid #FFCC00;
+        }
+        .search{
+            padding: 20px;
+            height: 70px;
+            border-bottom: 1px solid #e7e7e7;
+        }
+        .qunList{
+            border-bottom: 1px solid #e7e7e7;
+            height: 260px;
+        }
+        .listBox{
+            margin-top: 2px;
+            border: 1px solid #FFCC00;
+            height: 50px;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+        .listBox_imgBox img{
+            width: 50px;
+            padding: 2px;
+        }
+        .listBox_infoBox{
+            width: 150px;
+        }
+        .listBox_titBox{
+            padding-left: 5px;
+        }
+        .listBox_yulan{
+            color: #9a9090;
+            font-size: 14px;
+            padding-left: 5px;
+            padding-top: 5px;
+            overflow: hidden;
+        }
+        .listBox_timeBox{
+            padding-top: 5px;
+            color: #a7a0a0;
+            font-size: 13px;
+            padding-left: 2px;
+        }
+        .list{
+            background: #e3dede;
+        }
+        .list ul li{
+            list-style: none;
+        }
+        .list a:hover{
+            color: white;
+        }
+        .findapp{
+            width: 600px;
+            border: 1px solid #FFCC00;
+            position: absolute;
+            z-index:999999;
+            background: #efebeb;
+            left: 10%;
+            top:20%;
+        }
+        .resultBox{
+            height: 150px;
+            border: 1px solid #FFCC00;
+
+        }
+        .qNum_searchBox{
+            width: 500px;
+            margin: 20px auto;
+            border: 1px solid #FFCC00;
+            padding: 0 2px;
+        }
+        #qNum_search{
+            display: inline-block;
+            width: 430px;
+            outline:none;
+            height: 30px;
+            font-size: 17px;
+        }
+        .qNum_searchBox button{
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+        .result_qunBox{
+            margin: 10px;
+            background: #fff6fc;
+            width: 280px;
+            height: 150px;
+            border: 1px solid #154bf6;
+            overflow: hidden;
+        }
+        .result_qunBox_1{
+            width: 280px;
+            height: 75px;
+            border: 1px solid #b1b6c4;
+            overflow: hidden;
+        }
+        .result_qunBox_imgBox img{
+            width: 75px;
+            height: 60px;
+            border: 1px solid #b1b6c4;
+            margin: 5px;
+        }
+        .result_qunBox_infoBox_tit{
+            margin: 5px;
+            overflow: hidden;
+        }
+        .re_find_qNum{
+            color: red;
+        }
+        .result_qunBox_2{
+            height: 50px;
+            border: 1px solid #FFCC00;
+            overflow: hidden;
+        }
+        .create_input{
+            display: inline-block;
+            width:200px;
+            margin-top: 15px;
+            font-size: 16px;
+        }
+        #create_send{
+            display: inline-block;
+            width: 100px;
+            height: 30px;
+            background: #00fff5;
+            margin-top: 10px;
+        }
+        .resultBox p{
+            text-align: center;
+        }
+        .acclistBox{
+            overflow-x:auto;
+            height: 110px;
+        }
+        .numberceng{
+            border: 1px solid #E8F0E8;
+            height: 23px;
+            overflow: hidden;
+            font-size: 15px;
+        }
+        .numberceng:hover{
+            background: #E8F0E8;
+        }
+        .touxiang img{
+            width: 20px;
+            height: 20px;
+            box-sizing: border-box;
+        }
+        .sysBOX{
+            margin: 20px;
+        }
+        .deal_add_acc{
+            font-size:19px;
+            color: orangered;
+        }
+        .sys_str_box button{
+            margin:20px;
+        }
+    </style>
+    <script src="js/util.js"></script>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="js/jquery.cookie.js"></script>
+
+    <script>
+        var t;
+        var qNum;
+        var account;
+        function downFiles(ob){
+            var send_url="/yz_download";
+            var form="<div class='downformBox'> <form id='dowmform' method='post' action='/yz_download'>" +
+                "<input type=\"hidden\" type='text' value='"+qNum+"' name='qNum'>"  +
+                "<input type=\"hidden\" type='text' value='"+1+"' name='num'>"  +
+                "<input type=\"hidden\" type='text' value='"+$(ob).attr("filetime")+"' name='time'>"  +
+                "<input type=\"hidden\" type='text' value='"+$(ob).text()+"' name='oldname'>"  +
+                "<input type=\"hidden\" type='submit' id='downSubmit'>"+
+                "</form>" +
+                "</div>";
+            $("body").append(form);
+            $("#dowmform").submit();
+            $('.downformBox').remove();//发起提交，请求url的后台
+
+        }
+        function chat_add_str(item){
+            var addStr;
+            if(item.oppAcc=="root"){
+                if(item.type==5){
+                    addStr="<div class=\"chat_str_Box\">\n" +
+                        "                          <div class=\"chat_str_info\">\n" +
+                        "                              <span class=\"str_name_self\">"+item.acc_name+"</span>\n" +
+                        "                              <span class=\"str_acc\">("+item.acc+")</span>\n" +
+                        "                              <span class=\"str_time_self\">"+item.time+"</span>\n" +
+                        "                          </div>\n" +
+                        "                          <div class=\"chat_str_body\">\n" +
+                        "                              <span class='str_body_self'><a filetime='"+item.simTime+"' onclick='downFiles(this)' href='javascript:void(0)'>"+item.msg+"</a></span>\n" +
+                        "                          </div>\n" +
+                        "                      </div>";
+                }
+            }
+            else {
+                if (item.self == 1) {
+                    addStr = "<div class=\"chat_str_Box\">\n" +
+                        "                          <div class=\"chat_str_info\">\n" +
+                        "                              <span class=\"str_name_self\">" + item.acc_name + "</span>\n" +
+                        "                              <span class=\"str_acc\">(" + item.acc + ")</span>\n" +
+                        "                              <span class=\"str_time_self\">" + item.time + "</span>\n" +
+                        "                          </div>\n" +
+                        "                          <div class=\"chat_str_body\">\n" +
+                        "                              <span class='str_body_self'>" + item.msg + "</span>\n" +
+                        "                          </div>\n" +
+                        "                      </div>";
+                } else {
+                    addStr = "<div class=\"chat_str_Box\">\n" +
+                        "                          <div class=\"chat_str_info\">\n" +
+                        "                              <span class=\"str_name\">" + item.acc_name + "</span>\n" +
+                        "                              <span class=\"str_acc\">(" + item.acc + ")</span>\n" +
+                        "                              <span class=\"str_time\">" + item.time + "</span>\n" +
+                        "                          </div>\n" +
+                        "                          <div class=\"chat_str_body\">\n" +
+                        "                              <span>" + item.msg + "</span>\n" +
+                        "                          </div>\n" +
+                        "                      </div>";
+                }
+            }
+             $(".chat_body_Box").append(addStr);
+            $('.chat_body_Box').scrollTop($('.chat_body_Box')[0].scrollHeight);
+        }
+        function send_str() {
+            $.post("/yz/send_str", {
+                    qNum: qNum,
+                    chat_msg: $("#chat_str").text()
+                },
+                function (data, status) {
+                    if (status == "success") {
+                        if (data["code"] == 1) {
+                            $("#chat_str").text("");
+                        }
+                    }
+                });
+        }
+
+        function service(){
+            $.post("/get_service", {
+                },
+                function (data, status) {
+                    if (status == "success") {
+                        if (data["code"] == 1) {
+                            alert(data["msg"]);
+                        }
+                    }
+                });
+        }
+        function myfun (list){
+            for(var i=0;i<list.length;i++){
+                chat_add_str(list[i]);
+            }
+            return;
+        }
+        function recmsg(){
+            $.post("/yz/rec", {
+                qNum:qNum
+                },
+                function (data, status) {
+                    if (status == "success") {
+                        if (data["code"] == 1) {
+                           myfun(eval(data["msg"]));
+                        }
+                    }
+                });
+        }
+
+        function send_img(){
+            var len=($("#selectImg").get(0).files.length);
+            var formdata = new FormData();
+            formdata.append("acc",account);
+            formdata.append("qNum",qNum);
+            for(var i=0;i<len;i++)
+             formdata.append("files",$("#selectImg").get(0).files[i]);
+            $.ajax({
+                    acc:account,
+                    qNum,qNum,
+                    url:'/yz_update',
+                    type:'POST',
+                    data:formdata,
+                    processData : false,
+                    contentType : false,
+                },
+                function (data, status) {
+                    if (status == "success") {
+                        if (data["code"] == 1) {
+                            alert(data["msg"]);
+                        }
+                    }
+                });
+
+        }
+        function  searchByqNum(){
+            $.get("/json/searchByqNum", {
+                    qNum:$("#qNum_search").val()
+                },
+                function (data, status) {
+                    if (status == "success") {
+                        if (data["code"] == 1) {
+                            getResultBox(data["msg"]);
+                        }
+                    }
+                });
+        }
+        function getResultBox(data){
+            alert(data);
+            ob = JSON.parse(data);
+                var str="<div class=\"result_qunBox\">\n" +
+                    "                      <div class=\"result_qunBox_1\">\n" +
+                    "                          <div class=\"left result_qunBox_imgBox\">" +
+                    "                             <img src='images/bg.jpg'>" +
+                    "                           </div>\n" +
+                    "                          <div class=\"left result_qunBox_infoBox\">\n" +
+                    "                              <div class=\"result_qunBox_infoBox_tit\">\n" +
+                    "                                  <p><span>"+ob.name+"</span>(\n" +
+                    "                                      <span class=\"re_find_qNum\">"+ob.id+"</span>)\n" +
+                    "                                  </p>\n" +
+                    "                                  <p>"+ob.has+"/"+ob.max+"</p>\n" +
+                    "                                  <p>"+ob.type+"</p>\n" +
+                    "                              </div>\n" +
+                    "                          </div>\n" +
+                    "                          <div class=\"clear\"></div>\n" +
+                    "                      </div>\n" +
+                    "                      <div class=\"result_qunBox_2\">\n" +
+                    "                          <span>"+ob.qNotice+"</span>\n" +
+                    "                      </div>\n" +
+                    "                      <div class=\"result_qunBox_3\">\n" +
+                    "                          <button qNum='"+ob.id+"'class=\"right send_add_qun\">加入群</button>\n" +
+                    "                      </div>\n" +
+                    "                  </div>";
+                $(".result_find_str").append(str);
+
+            $(".send_add_qun").click(function (){
+                qNum=$(this).attr("qnum");
+                shenqingaddQun(qNum);
+            });
+        }
+        function  shenqingaddQun(qNum){
+            alert(qNum);
+            $.get("/add/shenqingByqNum", {
+                    qNum:qNum
+                },
+                function (data, status) {
+                    if (status == "success") {
+                            alert(data["msg"]);
+
+                    }
+                });
+        }
+        function  addBoxByfind(){
+            var str="<div class=\"result_find\">\n" +
+                "                      <p style=\"margin-top: 10px\" align=\"center\"><pan>搜索校友群</pan></p>\n" +
+                "                      <p class=\"qNum_searchBox\"><input type=\"text\" id=\"qNum_search\"><button class=\"fing_send\">发 送</button></p>\n" +
+                "                  </div>";
+            $(".resultBox").append(str);
+            $(".fing_send").click(function (){
+                searchByqNum();
+            });
+        }
+        function addBoxByCreate(){
+            var str="<p>创建群</p>\n" +
+                "                  <p><input class=\"create_input\" id=\"create_name\" type=\"text\" placeholder=\"创建的群名\"></p>\n" +
+                "                  <p><input class=\"create_input\" id=\"create_type\" type=\"text\" placeholder=\"创建群类别\"></p>\n" +
+                "                  <p> <button id=\"create_send\">创 建</button></p>";
+            $(".resultBox").append(str);
+            $("#create_send").click(function (){
+                send_create();
+            });
+        }
+        function send_create(){
+            $.get("/add/createQun", {
+                    type:$("#create_type").val(),
+                    name:$("#create_name").val()
+                },
+                function (data, status) {
+                    if (status == "success") {
+                        if (data["code"] == 1) {
+                            alert(data["msg"]);
+                        }
+                    }
+                });
+        }
+
+        function xianshisys(){
+            var t=$(".list").css("display");
+
+            if(t=="none"){
+                $(".list").css("display","");
+            }
+            else {
+                $(".list").css("display", "none");
+            }
+        }
+        function removehisBox(){
+            $(".hisBox1").empty();
+        }
+        function addQunBox(data){
+
+            data = JSON.parse(data);
+            var str= " <div class=\"left system_or_his\">\n" +
+                "              <div class=\"search\">\n" +
+                "                  <p>当前账户:"+account+"</p>\n" +
+                "                  <p>加群数量:"+data.length+"</p>\n" +
+                "              </div>\n" +
+                "              <div class=\"qunList\">\n";
+            for (i = 0; i < data.length; i++) {
+                var ob = data[i];
+                var var_str=
+                    "                  <div id='qun_"+ob.id+"' qNum='"+ob.id+"'class=\"listBox\">\n" +
+                    "                      <div class=\"left listBox_imgBox\">\n" +
+                    "                          <img src=\"images/bg.jpg\">\n" +
+                    "                      </div>\n" +
+                    "                      <div class=\"left listBox_infoBox\">\n" +
+                    "                          <div class=\"listBox_titBox\">\n" +
+                    "                              <span>"+ob.name+"</span>\n" +
+                    "                          </div>\n" +
+                    "                          <div class=\"listBox_yulan\">\n" +
+                    "                              <span></span>\n" +
+                    "                          </div>\n" +
+                    "                      </div>\n" +
+                    "                      <div class=\"left listBox_timeBox\">\n" +
+                    "                          <span></span>\n" +
+                    "                      </div>\n" +
+                    "                      <div class=\"clear\"></div>\n" +
+                    "                  </div>\n" ;
+                str=str+var_str;
+            }
+
+                str=str+"              </div>\n" +
+                    "              <div class=\"findBox\">\n" +
+                    "                  <button class=\"openBox\"> 查找群</button>\n" +
+                    "              </div>\n" +
+                    "              <div class=\"createBox\">\n" +
+                    "                  <button class=\"openCreateBox\">创建群</button>\n" +
+                    "              </div>\n" +
+                    "              <div class=\"sys\">\n" +
+                    "                  <p></p>\n" +
+                    "              </div>\n" +
+                    "          </div>\n" +
+                    "\n" +
+                    "          <div class=\"findapp\" style=\"display: none\" >\n" +
+                    "              <div class=\"closeBox right\">\n" +
+                    "                  <button>X</button>\n" +
+                    "              </div>\n" +
+                    "              <div class=\"clear\"></div>\n" +
+                    "              <div class=\"resultBox\">\n" +
+                    "\n" +
+                    "              </div>\n" +
+                    "              <div class=\"clear\"></div>\n" +
+                    "              <div class=\"result_find_str\">\n" +
+                    "\n" +
+                    "              </div>\n" +
+                    "              <div class=\"clear\"></div>\n" +
+                    "          </div>";
+            $(".chat_qun_Box").append(str);
+            $(".createBox").click(function (){
+                addBoxByCreate();
+                $(".findapp").css("display","");
+            });
+            $(".closeBox").click(function (){
+                $(".result_find_str").empty();
+                $(".resultBox").empty();
+                $(".findapp").css("display","none");
+            });
+            $(".openBox").click(function (){
+                addBoxByfind();
+                $(".findapp").css("display","");
+            });
+
+            $(".listBox").mouseleave(function (){
+                var id=$(this).attr("id");
+                $("#"+id).css("background","#e6f6e6");
+            });
+            $(".listBox").mouseenter(function (){
+                var id=$(this).attr("id");
+                $("#"+id).css("background","#dce8dc");
+            });
+            $(".listBox").click(function (){
+                var id=$(this).attr("id");
+                qNum=$("#"+id).attr("qNum");
+                $(".chat_qun_app_Box").remove();
+                init_getQun();
+                init_getQunUser();
+            });
+
+        }
+         function init_getQuns(){
+
+
+             $.get("/json/init_getQuns", {
+                    qNum:qNum
+                 },
+                 function (data, status) {
+                     if (status == "success") {
+                         if (data["code"] == 1) {
+                             alert(data["msg"]);
+                             account=$.cookie('account');
+                             addQunBox(data["msg"]);
+                         }
+                     }
+                 });
+         }
+
+
+
+        function addhisBox(){
+            gethis();
+        }
+        function dealhis(data){
+            var str="<style>\n" +
+                "        .hisBox{\n" +
+                "            z-index:999999;\n" +
+                "            position: absolute;\n" +
+                "            width: 500px;\n" +
+                "            height: 500px;\n" +
+                "            background: #a5a0a0;\n" +
+                "            left: 30%;\n" +
+                "            top:10%;\n" +
+                "        }\n" +
+                "        .his_str{\n" +
+                "            border: 1px solid #ffcc00;\n" +
+                "            width: 480px;\n" +
+                "            height: 450px;\n" +
+                "            margin: auto;\n" +
+                "            overflow-y:auto;"+
+                "        }\n" +
+                "        \n" +
+                "    </style>\n" +
+                "    <div class=\"hisBox\">\n" +
+                "        <div class=\"closeHistBox right\"><button onclick='removehisBox()'>X</button></div>\n" +
+                "        <div class=\"clear\"></div><div class='his_str'> \n";
+            data = JSON.parse(data);
+            for (i = 0; i < data.length; i++) {
+                var item = data[i];
+                var addStr = "<div>\n" +
+                    "                          <div>\n" +
+                    "                              <span>" + item.acc_name + "</span>\n" +
+                    "                              <span>(" + item.acc + ")</span>\n" +
+                    "                              <span>" + item.time + "</span>\n" +
+                    "                          </div>\n" +
+                    "                          <div>\n" +
+                    "                              <span>" + item.msg + "</span>\n" +
+                    "                          </div>\n" +
+                    "                      </div>";
+                str+=addStr;
+            }
+            str+="</div></div>";
+            $(".hisBox1").append(str);
+
+
+        }
+        function gethis(){
+            $.get("/get/his", {
+                    qNum:qNum
+                },
+                function (data, status) {
+                    if (status == "success") {
+                        if (data["code"] == 1) {
+                            dealhis(data["msg"]);
+                        }
+                    }
+                });
+        }
+        function init_list_acc(data){
+            data = JSON.parse(data);
+            for (i = 0; i < data.length; i++) {
+                var ob = data[i];
+                var str=
+                    "                        <div class='numberceng'>\n" +
+                    "                            <span class='touxiang'><img src='/images/bg.jpg'> </span>\n" +
+                    "                            <span>"+ob.name+"("+ob.acc+")</span>\n" +
+                    "                        </div>\n" ;
+                $(".acclistBox").append(str);
+            }
+
+        }
+        function init_getQunUser(){
+            $.get("/json/init_getQunUser", {
+                    qNum:qNum
+                },
+                function (data, status) {
+                    if (status == "success") {
+                        if (data["code"] == 1) {
+                            init_list_acc(data["msg"]);
+                        }
+                    }
+                });
+        }
+        function updateNotice(){
+          $("#noticestr").attr("contenteditable","true");
+          $("#noticestr").before("<button onclick='send_updatenotice()' class='linshi_bu'>修改</button><button class='linshi_bu' onclick='hidden_notice()'>取消</button>");
+        }
+        function send_updatenotice(){
+            $.get("/json/init_getQun", {
+                    qNum:qNum,
+                    qNotice:$("#noticestr").text()
+                },
+                function (data, status) {
+                    if (status == "success") {
+                        if (data["code"] == 1) {
+                            alert("修改成功");
+                            hidden_notice();
+                        }
+                    }
+                });
+        }
+        function hidden_notice(){
+            $("#noticestr").attr("contenteditable","false");
+            $(".linshi_bu").css("display","none");
+        }
+        function init_getQun(){
+            alert(qNum);
+            $.get("/json/init_getQun", {
+                    qNum:qNum
+                },
+                function (data, status) {
+                    if (status == "success") {
+                        if (data["code"] == 1) {
+                            init(data["msg"]);
+                        }
+                    }
+                });
+        }
+        function init(data){
+           var  ob = JSON.parse(data);
+           qNum=ob.id;
+                var str = "<div class=\"left chat_qun_app_Box\">\n" +
+                    "            <input type=\"hidden\" id=\"qNum\">\n" +
+                    "            <div class=\"chat_tit_Box\">\n" +
+                    "                <div class=\"left\">\n" +
+                    "                    <span>" + ob.name + "</span>\n" +
+                    "                    <span>" + ob.type + "群</span>\n" +
+                    "                </div>\n" +
+                    "\n" +
+                    "                <div class=\"right\">\n" +
+                    "                    <span><button onclick=\"xianshisys()\">设置</button></span>\n" +
+                    "                    <span><button onclick=\"addhisBox()\">历史</button></span>\n" +
+                    "                    <div class=\"hisBox1\"></div>\n" +
+                    "                </div>\n" +
+                    "                <div class=\"right list\" style=\"display:none;\">\n" +
+                    "                    <ul>\n" +
+                    "                        <a onclick='updateNotice()' class=\"sys_list\" href=\"javascript:void(0)\"><li>修改群公告</li></a>\n" +
+                    "                        <a class=\"sys_list\" href=\"javascript:void(0)\"><li>退出群聊</li></a>\n" +
+                    "                    </ul>\n" +
+                    "                </div>\n" +
+                    "                <div class=\"clear\"></div>\n" +
+                    "            </div>\n" +
+                    "            <div class=\"chat_left_Box left\">\n" +
+                    "                <div class=\"chat_body_Box\"></div>\n" +
+                    "                <div class=\"chat_scan_Box\">\n" +
+                    "                    <div class=\"chat_scan_sys left\">\n" +
+                    "                        <button class=\"tubiao\"  onclick=\"javascript:$('#selectImg').click();\">文件</button>\n" +
+                    "                        <input type=\"file\" multiple=\"multiple\" style=\"display:none\" id=\"selectImg\" >\n" +
+                    "\n" +
+                    "                    </div>\n" +
+                    "                    <div class=\"clear\"></div>\n" +
+                    "                    <div class=\"chat_scan_str\">\n" +
+                    "                        <div id=\"chat_str\" contentEditable=\"true\"></div>\n" +
+                    "                    </div>\n" +
+                    "                    <div class=\"chat_scan_send\">\n" +
+                    "                        <button id=\"chat_sub_msg\">发 送</button>\n" +
+                    "                    </div>\n" +
+                    "\n" +
+                    "                </div>\n" +
+                    "            </div>\n" +
+                    "            <div class=\"chat_right_Box right\">\n" +
+                    "                <div class=\"chat_notic_Box\">\n" +
+                    "                    <div><span>群通知:</span></div>\n" +
+                    "                    <div id='noticestr' contenteditable='false'><span>" + ob.qNotice + "</span></div>\n" +
+                    "                </div>\n" +
+                    "                <div class=\"chat_numbers_Box\">\n" +
+                    "                    <div class=\"chat_numbers_info\"><span id=\"qun_number_name\">群成员</span><span id=\"qun_number_num\">(" + ob.hasLogin + "/" + ob.has + ")</span></div>\n" +
+
+                    "                    <div class='acclistBox'>\n" +
+                    "                    </div>\n" +
+                    "                </div>\n" +
+                    "            </div>\n" +
+                    "            <div class=\"clear\"></div>\n" +
+                    "        </div>";
+
+                $(".system_or_his").before(str);
+            $("#selectImg").change(function (){
+                send_img();
+            })
+            $("#chat_sub_msg").click(function(){
+                send_str();
+            })
+            $("#chat_str").keydown(function(e){
+                //触发事件“ctrl+enter”键
+                if (e.ctrlKey && e.which == 13){
+                    $("#chat_str").val($("#chat_str").val()+"\n");
+                    $("#chat_str").scrollTop($("#chat_str")[0].scrollHeight);
+                }
+                else if (e.which == 13){
+                    $("#chat_sub_msg").click();
+                    return false;
+                }
+            });
+        }
+        function deal_true(a){
+            msgid=($(a).attr("msgid"));
+
+            $.get("/add/dealAddQun", {
+                    acc:$(a).attr("acc"),
+                    qNum:$(a).attr("qNum"),
+                    oppAcc:account,
+                    id:$(a).attr("msgid"),
+                    doing:1
+                },
+                function (data, status) {
+                    if (status == "success") {
+                        alert(data["msg"]);
+                        $("#_msg"+msgid).remove();
+                    }
+                });
+        }
+        function deal_false(a){
+            msgid=($(a).attr("msgid"));
+
+            $.get("/add/dealAddQun", {
+                    acc:$(a).attr("acc"),
+                    qNum:$(a).attr("qNum"),
+                    oppAcc:account,
+                    id:$(a).attr("msgid"),
+                    doing:0
+                },
+                function (data, status) {
+                    if (status == "success") {
+                        alert(data["msg"]);
+                        $("#_msg"+msgid).remove();
+                    }
+                });
+        }
+        function dealrecSys(data){
+            data = JSON.parse(data);
+            for (i = 0; i < data.length; i++) {
+                ob=data[i];
+                var str=" <div id='_msg"+ob.id+"' msgid='"+ob.id+"' class=\"sys_str_box\">\n" +
+                    "     时间:"+ob.time+"----账户:<span class=\"deal_add_acc\">"+ob.acc+"</span>("+ob.acc_name+"),"+ob.msg+"<span class=\"deal_add_acc\">"+ob.qNum+"</span>,<button onclick='deal_true(this)' class='send_sys_1' acc='"+ob.acc+"' qNum='"+ob.qNum+"' msgid='"+ob.id+"'>同意</button><button onclick='deal_false(this)' class='send_sys_2' qNum='"+ob.qNum+"' acc='"+ob.acc+"' msgid='"+ob.id+"'>无视</button>;\n" +
+                    "        </div>";
+
+                if($("#_msg"+ob.id).length > 0){
+                }else {
+                    $(".sysbox_str").append(str);
+                }
+            }
+        }
+        function recSys(){
+            $.get("/yz/recSys", {
+                },
+                function (data, status) {
+                    if (status == "success") {
+                        dealrecSys(data["msg"]);
+                    }
+                });
+
+        }
+        $(document).ready(function(){
+            qNum=123456789;
+            init_getQuns();
+            init_getQun();
+            init_getQunUser();
+
+            t = setInterval("recmsg()", 1000);
+            d =setInterval("recSys()",2000);
+            $("#chat_str").bind("paste", function(e){
+                console.info(e);
+                var cbd = (e.clipboardData || e.originalEvent.clipboardData).items;
+                for(var i = 0; i < cbd.length; i++) {
+                    var item = cbd[i];
+                    console.info(item);
+                    if(item.kind == "file"){
+                        var blob = item.getAsFile();
+                        // if (blob.size === 0) {
+                        //     return;
+                        // }
+                        console.info(blob);
+                    }
+
+                }
+
+            } );
+
+        });
+    </script>
+</head>
+<body>
+
+    <div class="chat_qun_Box">
+
+          <div class="testdiv"></div>
+    </div>
+    <div class="clear"></div>
+
+    <div class="sysBOX">
+        <div>系统消息</div>
+        <div class="sysbox_str"></div>
+    </div>
+</body>
+</html>

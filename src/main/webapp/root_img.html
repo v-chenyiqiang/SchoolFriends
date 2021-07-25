@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>后台系统管理员界面</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        html,body{height:100%;width: 100%}
+
+        .leftBox{
+            width: 20%;
+            border-right: 1px solid #e3dede;
+            box-sizing: border-box;
+
+        }
+        .rightBox{
+            width: 80%;
+            box-sizing: border-box;
+        }
+
+        .schoolImg{
+            font-size: 14px;
+            color: #000;
+            font-family: "microsoft yahei", 微软雅黑;
+            border-top-width: 0px;
+            border-right-width: 0px;
+            border-bottom-width: 0px;
+            border-left-width: 0px;
+            border-top-style: solid;
+            border-right-style: solid;
+            border-bottom-style: solid;
+            border-left-style: solid;
+            aspect-ratio: auto 200 / 150;
+            height: 150px;
+            width: 250px;
+            padding: 0 40px 20px;
+
+        }
+        td{
+            font-size: 14px;
+            color: #000;
+            font-family: "microsoft yahei", 微软雅黑;
+        }
+        tr{
+            font-size: 14px;
+            color: #000;
+            font-family: "microsoft yahei", 微软雅黑;
+        }
+        tbody{
+            font-size: 14px;
+            color: #000;
+            font-family: "microsoft yahei", 微软雅黑;
+        }
+        ul,li{
+            padding:0;
+            margin:0;
+            list-style:none;
+            box-sizing: border-box;
+        }
+        ul{
+            margin: 20px;
+        }
+        li{
+            border: 1px solid #FFCC00;
+            padding: 20px;
+        }
+        li:hover{
+            background: #e7e7e7;
+            cursor:pointer;
+        }
+        .right{
+            float: right;
+        }
+        .left{
+            float: left;
+        }
+        .clear{
+            clear: both;
+        }
+        input{
+            display: inline-block;
+            width: 20px;
+        }
+    </style>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="js/jquery.cookie.js"></script>
+    <script>
+        function  deal(data){
+            data = JSON.parse(data);
+            var str="<tbody>";
+            for (i = 0; i < data.length; i++) {
+                if(i==0||(i+1)%3==1){
+                    str=str+"<tr>";
+                }
+                var ob = data[i];
+                var var_str= " <td>\n" +
+                    "                        <img class=\"schoolImg\" src=\""+ob.url+"\"></img><input  class='uppid' type='text' num='"+ob.id+"' placeholder='"+ob.id+"'>\n" +
+                    "                    </td>";
+
+                str+=var_str;
+                if(i==data.length-1||(i+1)%3==0){
+                    str=str+"</tr>";
+                }
+            }
+            str=str+"</tbody>";
+            $(".schooImgBox").append(str);
+            $(".uppid").focus(function (){
+               id=$(this).val();
+            });
+            $(".uppid").blur(function (){
+                var beforeid=$(this).val();
+                if(id!=beforeid){
+                    var re = /^[0-9]+.?[0-9]*/;//判断字符串是否为数字//判断正整数/[1−9]+[0−9]∗]∗/
+                    if (re.test(beforeid)) {
+                        uppid($(this),$(this).attr("num"),$(this).val());
+
+                    }
+
+                }
+            });
+        }
+        var id;
+        function uppid(obj,old,theNew){
+            $.get("/img/updateId", {
+                old:old,
+                theNew:theNew
+                },
+                function (data, status) {
+                    if (status == "success") {
+                        if (data["code"] == 1) {
+                            obj.attr("num",obj.val());
+                            alert("修改成功");
+                        }
+                    }
+                });
+        }
+        $(document).ready(function(){
+            $.get("/img/getimsgs", {
+                },
+                function (data, status) {
+                    if (status == "success") {
+                        if (data["code"] == 1) {
+                            deal(data["msg"]);
+                        }
+                    }
+                });
+            $("#uppimg").click(function (){
+                $.get("/img/addimsgs", {
+                    },
+                    function (data, status) {
+                        if (status == "success") {
+                            if (data["code"] == 1) {
+                                alert(data["msg"]);
+                            }
+                        }
+                    });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="box">
+        <div class="leftBox left">
+            <ul>
+                <li style="background: #00fff5">
+                    <a href="root_img.html">校园风景</a></li>
+                <li>
+                    <a href="root_liuyan.html">留言版</a>
+                </li>
+                <li>
+                    <a href="root_dongtai.html">校友动态</a></li>
+                <li>
+                    <a href="root_chat.html">在线聊天</a>
+                </li>
+                <li> <a href="root_news.html">母校新闻</a></li>
+            </ul>
+        </div>
+        <div class="rightBox right">
+            <div class="formBox">
+                <div class="add">
+                    <button id="uppimg">图片更新</button>
+                </div>
+                <div class="schooImgBox">
+                    <tbody>
+                    <tr id="needadd">
+
+                    </tr>
+                    </tbody>
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</body>
+</html>

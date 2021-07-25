@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>后台系统管理员界面</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        html,body{height:100%;width: 100%}
+
+        .leftBox{
+            width: 20%;
+            border-right: 1px solid #e3dede;
+            box-sizing: border-box;
+
+        }
+        .rightBox{
+            width: 80%;
+            box-sizing: border-box;
+        }
+
+        .schoolImg{
+            font-size: 14px;
+            color: #000;
+            font-family: "microsoft yahei", 微软雅黑;
+            border-top-width: 0px;
+            border-right-width: 0px;
+            border-bottom-width: 0px;
+            border-left-width: 0px;
+            border-top-style: solid;
+            border-right-style: solid;
+            border-bottom-style: solid;
+            border-left-style: solid;
+            aspect-ratio: auto 200 / 150;
+            height: 150px;
+            width: 250px;
+            padding: 0 40px 20px;
+
+        }
+        td{
+            font-size: 14px;
+            color: #000;
+            font-family: "microsoft yahei", 微软雅黑;
+        }
+        tr{
+            font-size: 14px;
+            color: #000;
+            font-family: "microsoft yahei", 微软雅黑;
+        }
+        tbody{
+            font-size: 14px;
+            color: #000;
+            font-family: "microsoft yahei", 微软雅黑;
+        }
+        ul,li{
+            padding:0;
+            margin:0;
+            list-style:none;
+            box-sizing: border-box;
+        }
+        ul{
+            margin: 20px;
+        }
+        li{
+            border: 1px solid #FFCC00;
+            padding: 20px;
+        }
+        li:hover{
+            background: #e7e7e7;
+            cursor:pointer;
+        }
+        .right{
+            float: right;
+        }
+        .left{
+            float: left;
+        }
+        .clear{
+            clear: both;
+        }
+        input{
+            display: inline-block;
+            width: 20px;
+        }
+        .lyBody{
+            width: 1000px;
+            margin: 30px auto;
+            border-left: 1px solid #00dede;
+        }
+        .lyBox{
+            width: 700px;
+            box-sizing: border-box;
+            min-height: 170px;
+            margin: 20px;
+            border: 1px solid #FFCC00;
+        }
+        .lyImgBox{
+            box-sizing: border-box;
+            width: 150px;
+            height: 140px;
+
+            float: left;
+        }
+        .lyImgBox img{
+            width: 150px;
+            height: 140px;
+
+        }
+        .lyInfoBox{
+            box-sizing: border-box;
+
+            float: left;
+            overflow: hidden;
+            width: 547px;
+        }
+        .infoTit{
+            box-sizing: border-box;
+
+        }
+        .infoStr{
+            box-sizing: border-box;
+            overflow: hidden;
+            min-height: 110px;
+        }
+        .lyinfostrfont{
+            font-family: '微软雅黑';
+            font-size: 17px;
+            text-indent:2rem;
+            padding-left: 10px;
+            margin-top: 20px;
+        }
+
+        .lyNum img,.plZan img{
+            width: 20px;
+            height: 20px;
+            font-family: "microsoft yahei", 微软雅黑;
+        }
+        .plZan,.lyNum{
+            margin-right: 20px;
+        }
+        .more_plBox{
+            background: #e3dede;
+        }
+        .more_pl{
+            border-bottom: 1px solid #FFCC00;
+        }
+        .more_pl_name{
+            color: #030303;
+            font-weight: bolder;
+            font-size: 16px;
+        }
+        .more_pl_nr{
+            color: #030303;
+        }
+        .plnewstr{
+            margin-top: 10px;
+            font-size: 15px;
+            border: 1px solid #00fff5;
+
+            outline:none;
+        }
+        tbody{
+            font-size: 14px;
+            color: #000;
+            font-family: "microsoft yahei", 微软雅黑;
+        }
+        .school_img_tit span{
+            font-size: 14px;
+            color: #007db8;
+            font-weight: bold;
+            font-family: 微软雅黑;
+        }
+    </style>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="js/jquery.cookie.js"></script>
+    <script>
+
+        function getLiuyan(){
+            $.ajax({
+                    url:'/json/friendmsg',
+                    type:'get',
+                    dataType:'json',
+                    processData : false,
+                    contentType : false,
+                    success:function (data){
+                        addly(data["msg"]);
+
+                    }
+                }
+            );
+        }
+        function addly(data) {
+            data = JSON.parse(data);
+            for (i = 0; i < data.length; i++) {
+                var ob = data[i];
+                var str = "<div class=\"lyBox\" id='lyBox"+ob.id+"'>\n" +
+                    "        <div class=\"lyImgBox\">\n" +
+                    "            <img src=\"images/A33.jpg\">\n" +
+                    "            <h3 align='center'>" + ob.name + "(<span style='color: #00dede'>" + ob.acc + "</span>)</h3>\n" +
+                    "        </div>\n" +
+                    "        <div class=\"lyInfoBox\">\n" +
+                    "            <div class=\"infoTit\">\n" +
+                    "                <h2 align='center'>" + ob.tit + "</h2>\n" +
+                    "            </div>\n" +
+                    "            <div class=\"infoStr\">\n" +
+                    "                <p class='lyinfostrfont'>" + ob.msg + "\n" +
+                    "                </p>\n" +
+                    "            </div>\n" +
+                    "            <div class=\"more_plBox\">\n" +
+                    "\n" +
+                    "            </div>\n" +
+                    "            <div class=\"infoBottom\">\n" +
+                    "                <div class=\"lyTime left\">\n" +
+                    "                    <span style='padding-left: 10px'>" + ob.time + "</span>\n" +
+                    "                </div>\n" +
+                    "                <div class=\"plZan right\">\n" +
+                    "                    <a href=\"javascript:void(0)\">\n" +
+                    "                        <span><img level=\""+ob.level+"\" class='zan_img' id=\"zan_img_" + ob.id + "\" src=\"images/zan.png\"></span>\n" +
+                    "                        <span id='jlZan_Num_"+ob.id+"'>" + ob.zan + "</span>\n" +
+                    "                    </a>\n" +
+                    "                </div>\n" +
+                    "                <div class=\"lyNum right\">\n" +
+                    "                    <a href=\"javascript:void(0)\">\n" +
+                    "                        <span><img level=\""+ob.level+"\"  class='pl_img' id=\"pl_img_" + ob.id + "\" src=\"images/pl.png\"></span>\n" +
+                    "                        <span id='pl_img_num_"+ob.id+"'>" + ob.plNum + "</span>\n" +
+                    "                    </a>\n" +
+                    "                </div>\n" +
+                    "                <div class=\"clear\"></div>\n" +
+                    "            </div>\n" +
+                    "            <div class=\"plnewsBox\">\n" +
+                    "\n" +
+                    "            </div>\n" +
+                    "        </div>\n" +
+                    "        <div class=\"clear\"></div>\n" +
+                    "    </div><button class='deleteBox' deid='"+ob.id+"'>删除</button>";
+
+                if($("#zan_img_"+ob.id).length>0){
+                    return false;
+                }else {
+                    $(".lyBody").append(str);
+                }
+            }
+            $(".deleteBox").click(function (){
+                if (confirm("请确认是否删除")) {
+                    deleteByid($(this).attr("deid"));
+                }
+            });
+            function deleteByid(id){
+                $.get("/delete/delefriendmsg", {
+                        id:id
+                    },
+                    function (data, status) {
+                        if (status == "success") {
+                            if (data["code"] == 1) {
+                                alert(data["msg"]);
+                                $("#lyBox"+id).remove();
+                            }
+                        }
+                    });
+            }
+
+        };
+        $(document).ready(function(){
+            getLiuyan();
+        });
+    </script>
+</head>
+<body>
+    <div class="box">
+        <div class="leftBox left">
+            <ul>
+                <li>
+                    <a href="root_img.html">校园风景</a></li>
+                <li>
+                    <a href="root_liuyan.html">留言版</a>
+                </li>
+                <li style="background: #00fff5">
+                    <a href="root_dongtai.html">校友动态</a></li>
+                <li>
+                    <a href="root_chat.html">在线聊天</a>
+                </li>
+                <li> <a href="root_news.html">母校新闻</a></li>
+            </ul>
+        </div>
+        <div class="rightBox right">
+            <div class="formBox">
+                <div style="border-bottom: 1px solid #57ea07" class="lyBody">
+
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</body>
+</html>
